@@ -28,6 +28,7 @@ Port 22
 
 # Authentication:
 
+AllowGroups sudo
 #LoginGraceTime 2m
 PermitRootLogin no
 #StrictModes yes
