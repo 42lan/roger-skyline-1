@@ -1,12 +1,26 @@
 VM Part
 Install and Update
-Virtualbox -> Guest machine -> Settings -> Storage -> Controller: SATA
-fdisk -l or df -H
-apt list —upgradable
-apt-cache pkgnames
+1. Virtualbox -> Guest machine -> Settings -> Storage -> Controller: SATA
+2. fdisk -l or df -H
+3. apt list —upgradable
+4. apt-cache pkgnames
 
 
 Partie Réseau et Sécurité
 Réseau et Sécurité
-ssh
-ssh-keygen 
+
+1.
+sudo adduser test1
+sudo usermod -aG sudo test1
+
+3.
+cat /etc/network/interfaces
+
+4.
+In VM
+vi /etc/network/interfaces
+	allow-hotplug enp0s3
+	iface enp0s3 inet static
+	address	10.0.2.1
+	netmask 255.255.255.192
+	gateway 10.0.2.2
