@@ -1,0 +1,12 @@
+VM Part
+Install and Update
+Virtualbox -> Guest machine -> Settings -> Storage -> Controller: SATA
+fdisk -l or df -H
+apt list —upgradable
+apt-cache pkgnames
+
+
+Partie Réseau et Sécurité
+Réseau et Sécurité
+ssh
+ssh-keygen 
