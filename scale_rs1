@@ -1,0 +1,32 @@
+___	PART VM ___________________________________________________________________
+___	Checks
+01.
+02.
+
+__	Install and Update
+01.	Virtualbox -> Guest machine -> Settings -> Storage -> Controller: SATA
+02.	sudo fdisk -l
+	sudo df -H
+03.	sudo apt list —-upgradable
+	sudo apt-get -u upgrade --assume-no
+04.	sudo dpkg-query -l  | grep "docker|\vagrant\|traefik"
+
+
+___	PART NETWORK AND SECURITY _________________________________________________
+___	Network and Security
+01.	sudo adduser test1
+	sudo usermod -aG sudo test1
+03.	sudo cat /etc/network/interfaces
+04.	In VM Guest:
+		sudo vi /etc/network/interfaces
+			allow-hotplug enp0s3
+			iface enp0s3 inet static
+			address	10.0.2.1
+			netmask 255.255.255.192
+			gateway 10.0.2.2
+05.	awk '/Port/' /etc/ssh/sshd_config
+06.	sudo iptables -L
+07.	
+08.	sudo netstat -npl
+09.	sudo service --status-all
+10.	
