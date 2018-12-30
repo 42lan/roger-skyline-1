@@ -79,7 +79,36 @@ ___ V.3 Network and Security Part ______________________________________________
 		roger@debian$ sudo service sshd restart
 	Now I can work on server through ssh from Host machine	
 		amalsago@42.fr$ ssh roger@10.13.31.1 -p 2222
-5.	
+5.	roger@debian$ sudo vi firewall
+		#!/bin/bash
+
+		iptables -F
+		iptables -X
+		iptables -P INPUT DROP
+		iptables -P FORWARD DROP
+		iptables -P OUTPUT DROP
+		# Accept all established connection
+		iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+		iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+		# Authorize loopback
+		iptables -A INPUT -i lo -j ACCEPT
+		iptables -A OUTPUT -o lo -j ACCEPT
+
+		# Allow SSH connection
+		iptables -A INPUT -p tcp -m state --state NEW --dport 2222 -j ACCEPT
+
+
+	roger@debian$ sudo chmod +x firewall
+
+
+
+
+
+
+
+
+
 
 sudo iptables-save > /etc/iptables/rules.v4
 sudo iptables-restore < /etc/iptables/rules.v4
