@@ -48,70 +48,74 @@ ___ V.2 ________________________________________________________________________
 	Install the GRUB boot loader on a hard disk /dev/sda
 
 3.	Update and upgrade system and packages
-		root@debian# apt-get update
-		root@debian# apt-get upgrade
+		root@debian:~# apt-get update
+		root@debian:~# apt-get upgrade
 
 ___ V.3 Network and Security Part ______________________________________________
 
 1.	Non root user was created durring OS installation
 2.	Log as root and install `sudo` package
 	Add roger to sudo's group
-		root@debian# adduser roger sudo
-	Exit from root and never come in back
-3.	roger@debian$ sudo vi /etc/network/interfaces
+		root@debian:~# adduser roger sudo
+	/! Exit from root and never come in back
+3.	roger@debian:~$ sudo vi /etc/network/interfaces
 	iface enp0s3 inet static
 		address 10.13.31.1
 		netmask 255.255.255.252
 		gateway 10.13.254.254
-	roger@debian$ sudo reboot
+	roger@debian:~$ sudo reboot
 4.	Through Guest machine
-		roger@debian$ sudo vi /etc/ssh/sshd_config
+		roger@debian:~$ sudo vi /etc/ssh/sshd_config
 			Port 2222
 			PermitRootLogin no
-		roger@debian$ sudo service sshd restart
+		roger@debian:~$ sudo service sshd restart
 	Through Host machine
-		amalsago@42.fr$ ssh-keygen
-		amalsago@42.fr$ ssh-copy-id roger@10.13.31.1 -p 2222
+		amalsago@42.fr:~$ ssh-keygen
+		amalsago@42.fr:~$ ssh-copy-id roger@10.13.31.1 -p 2222
 	Through Guest machine
-		roger@debian$ sudo vi /etc/ssh/sshd_config
+		roger@debian:~$ sudo vi /etc/ssh/sshd_config
 			PubkeyAuthentification yes
 			PasswordAuthentification no
-		roger@debian$ sudo service sshd restart
+		roger@debian:~$ sudo service sshd restart
 	Now I can work on server through ssh from Host machine	
-		amalsago@42.fr$ ssh roger@10.13.31.1 -p 2222
-5.	roger@debian$ sudo vi firewall
+		amalsago@42.fr:~$ ssh roger@10.13.31.1 -p 2222
+5.	roger@debian:~$ sudo apt-get install iptables-persistent
+	roger@debian:~$ cd /etc/init.d
+	roger@debian:/etc/init.d$ sudo vi firewall
 		#!/bin/bash
-
+		
 		iptables -F
 		iptables -X
 		iptables -P INPUT DROP
 		iptables -P FORWARD DROP
 		iptables -P OUTPUT DROP
+		
 		# Accept all established connection
 		iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 		iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-
+		
 		# Authorize loopback
 		iptables -A INPUT -i lo -j ACCEPT
 		iptables -A OUTPUT -o lo -j ACCEPT
-
+		
+		# Allow incoming and outgoing ping
+		iptables -A INPUT -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+		iptables -A OUTPUT -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+		
+		# Allow FTP incoming and outgoing connections
+		iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT
+		iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW -j ACCEPT
+		iptables -A OUTPUT -p udp --dport 53 -m state --state NEW -j ACCEPT
+		
 		# Allow SSH connection
 		iptables -A INPUT -p tcp -m state --state NEW --dport 2222 -j ACCEPT
-
-
-	roger@debian$ sudo chmod +x firewall
-
-
-
+	roger@debian:/etc/init.d$ sudo chmod +x firewall
+	roger@debian:/etc/init.d$ sudo netfilter-persistent save
+6.	roger@debian:~$ sudo apt-get install fail2ban
 
 
 
 
-
-
-
-sudo iptables-save > /etc/iptables/rules.v4
-sudo iptables-restore < /etc/iptables/rules.v4
 
 6)
 sudo fail2ban-client status					- to see status of f2b
