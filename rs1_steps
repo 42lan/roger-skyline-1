@@ -1,0 +1,80 @@
+PARTIE OBLIGATOIRE
+
+V.1
+OK
+
+V.2
+1) 2)
+Hostname: debian
+Domaine name: empty
+root:root
+Timezone: Eastern
+Manual Partion Disk:
+Real what I have written value
+#1 309.3M	/		(310.4M)
+#5 98.6M	/home	(100M)
+#6 4.2G		/usr		(4.2G)
+#7 2.3G		/var		(2.3G)
+#8 179.3M	/tmp		(180M)
+#9 1.5G		/swap	(1.5G)
+
+While installation chose just SSH
+
+3)
+sudo unlink /etc/localtime
+sudo ln -s /usr/share/zoneinfo/Etc/GMT-1 /etc/localtime
+sudo apt-get update - update list of available packages
+sudo apt-get upgrade - upgrade the system by installing/upgrading packages
+sudo apt-get install net-tools
+
+
+V.3
+_____________________________________________________________________
+1)
+sudo adduser roger : to create new user named roger in interactive mode
+sudo usermod -aG sudo roger : to add roger into sudo group
+
+_____________________________________________________________________
+2)
+sudo roger
+
+_____________________________________________________________________
+3)
+Avant tout générer une clé ssh
+ssh-keygen
+ssh-copy-id roger@127.0.0.1 -p 2222 
+
+Puis
+3.1. Dans Debian faire:
+Faire les modification suivantes dans Primary Network Interface qui se trouve dans le fichier /etc/network/interfaces:
+Changer dhcp en static et ajouter address 10.13.31.1, netmask 255.255.255.252 et gateway 10.13.254.254
+
+_____________________________________________________________________
+4)
+4.1)
+Modifier les champs du ficher sshd_config
+l.22 Decommenter Port 22
+l.33 Decommenter et mettre la valeur no au champs PermitRootLogin
+l.37 Mettre yes au champs PubkeyAuthentification
+l.57 Mettre la valeur no au PasswordAuthentification
+Ajouter AllowGroups sudo
+
+4.2)
+Redemarrer le service sshd
+sudo systemctl restart sshd 
+
+4.3)
+Dans VirtualBox faire:
+Choisir VM -> Settings -> Adapter 1 -> Advance -> Port Forwarding :
+shh  TCP  10.12.1.8   2507  10.0.2.1   22
+
+_____________________________________________________________________
+5)
+
+sudo iptables-save > /etc/iptables/rules.v4
+sudo iptables-restore < /etc/iptables/rules.v4
+
+6)
+sudo fail2ban-client status					- to see status of f2b
+sudo fail2ban-client status ssh				- to see status of ssh jail
+sudo fail2ban-client set ssh unbanip @IP	- to unban IP
