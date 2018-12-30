@@ -1,0 +1,139 @@
+PARTIE OBLIGATOIRE
+
+V.1
+OK
+
+V.2
+
+___ VM Creation ________________________________________________________________
+Name		: RS1
+Type		: Linux
+Version		: Debian (64-bit)
+Memory size	: 1024 MB
+Virtual hard disk
+	File size				: 8 GB
+	Hard disk tfile type	: VDI
+	Storage					: Fixed size
+Network
+	Adapter 1
+		Attached to	: Bridge Adapter
+		Name		: en0: Ethernet
+		Advanced
+			Adapter Type		: Intel PRO/1000 MT Desktop
+			Promiscuous mode	: Allow All
+
+___ Installation ______________________________________________________________
+Basic configuration
+	Selected language	: English
+	Selected location	: other -> Europe -> France
+	Locales config		: US - en_US.UTF-8
+	Keyboard			: American English
+
+Network configuration
+	Hostname		: debian
+	Domaine name	:
+
+Users configuration
+	Root password	: root
+	Nonadm user		: roger
+		Password	: roger
+
+Partion Disks
+	Partitioning method	: Manual
+		#1 2.4 GB	/
+		#2 4.2 GB	/usr
+		#3 2.0 GB	/swap
+
+Package manager
+	Mirror counry	: France
+	Archive mirror	: ftp.fr.debian.org
+	HTTP Proxy		:
+
+Refuse popularity-contest
+
+Software selection
+	SSH server
+
+Install the GRUB boot loader on a hard disk /dev/sda
+
+_______________________________________________________________________________
+
+1.	Log as root and install `sudo` package
+2.	Add roger to sudo's group
+		root@debian# adduser roger sudo
+3.	Exit from root and never come in back
+_______________________________________________________________________________
+
+roger@debian$ sudo apt-get update - update list of available packages
+roger@debian$ sudo apt-get upgrade - upgrade the system by upgrading packages
+_______________________________________________________________________________
+
+
+
+roger@debian$ sudo apt-get install net-tools
+
+
+___ V.3 Network and Security Part _____________________________________________
+1.	Ok
+2.	Ok
+3.	roger@debian$ sudo vi /etc/network/interfaces
+	iface enp0s3 inet static
+		address 10.13.31.1
+		netmask 255.255.255.252
+		gateway 10.13.254.254
+	roger@debian$ sudo reboot
+4.	Through Guest machine
+		roger@debian$ sudo vi /etc/ssh/sshd_config
+			Port 2222
+			PermitRootLogin no
+		roger@debian$ sudo service sshd restart
+	Through Host machine
+		amalsago@42.fr$ ssh-keygen
+		amalsago@42.fr$ ssh-copy-id roger@10.13.31.1 -p 2222
+	Through Guest machine
+		roger@debian$ sudo vi /etc/ssh/sshd_config
+			PubkeyAuthentification yes
+			PasswordAuthentification no
+		roger@debian$ sudo service sshd restart
+	Now I can work on server through ssh from Host machine	
+		amalsago@42.fr$ ssh roger@10.13.31.1 -p 2222
+
+
+Avant tout générer une clé ssh
+ssh-keygen
+ssh-copy-id roger@127.0.0.1 -p 2222 
+
+Puis
+3.1. Dans Debian faire:
+Faire les modification suivantes dans Primary Network Interface qui se trouve dans le fichier /etc/network/interfaces:
+Changer dhcp en static et ajouter address 10.13.31.1, netmask 255.255.255.252 et gateway 10.13.254.254
+
+_____________________________________________________________________
+4)
+4.1)
+Modifier les champs du ficher sshd_config
+l.22 Decommenter Port 22
+l.33 Decommenter et mettre la valeur no au champs PermitRootLogin
+l.37 Mettre yes au champs PubkeyAuthentification
+l.57 Mettre la valeur no au PasswordAuthentification
+Ajouter AllowGroups sudo
+
+4.2)
+Redemarrer le service sshd
+sudo systemctl restart sshd 
+
+4.3)
+Dans VirtualBox faire:
+Choisir VM -> Settings -> Adapter 1 -> Advance -> Port Forwarding :
+shh  TCP  10.12.1.8   2507  10.0.2.1   22
+
+_____________________________________________________________________
+5)
+
+sudo iptables-save > /etc/iptables/rules.v4
+sudo iptables-restore < /etc/iptables/rules.v4
+
+6)
+sudo fail2ban-client status					- to see status of f2b
+sudo fail2ban-client status ssh				- to see status of ssh jail
+sudo fail2ban-client set ssh unbanip @IP	- to unban IP
