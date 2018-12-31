@@ -55,6 +55,7 @@ ___ V.3 Network and Security Part ______________________________________________
 
 1.	Non root user was created durring OS installation
 2.	Log as root and install `sudo` package
+		root@debian:~# apt-get install sudo
 	Add roger to sudo's group
 		root@debian:~# adduser roger sudo
 	/! Exit from root and never come in back
