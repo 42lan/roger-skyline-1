@@ -128,8 +128,21 @@ ___ V.3 Network and Security Part ______________________________________________
 		port     = 2222
 		logpath  = /var/log/auth.log
 	roger@debian:/etc/fail2ban$ sudo service fail2ban restart
-7.	roger@debian:~$ sudo apt-get install psad
+7.	roger@debian:~$ sudo vi /etc/init.d/firewall
+		# To organize log of packets for `psad`
+		...
+		$IPT -A INPUT -j LOG
+		$IPT -A FORWARD -j LOG
+		...
+	roger@debian:~$ sudo vi /etc/syslog.conf
+		kern.info	|/var/lib/psad/psadfifo
+	roger@debian:~$ sudo service syslog restart
+	roger@debian:~$ sudo vi /etc/psad/psad.conf
+		EMAIL_ADDRESSES		root@localhost,amalsago@student.42.fr;
+		HOSTNAME			rs1@debian
 
+sudo psad --sig-update
+sudo psad -R
 
 
 
