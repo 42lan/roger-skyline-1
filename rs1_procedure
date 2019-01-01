@@ -1,9 +1,8 @@
-PARTIE OBLIGATOIRE
 ___ V.1 ________________________________________________________________________
 OK
 
 ___ V.2 ________________________________________________________________________
-1.	VM Creation
+01.	VM Creation
 	Name		: RS1
 	Type		: Linux
 	Version		: Debian (64-bit)
@@ -20,7 +19,7 @@ ___ V.2 ________________________________________________________________________
 				Adapter Type		: Intel PRO/1000 MT Desktop
 				Promiscuous mode	: Allow All
 
-2. OS Installation
+02. OS Installation
 	Basic configuration
 		Selected language	: English
 		Selected location	: other -> Europe -> France
@@ -47,26 +46,25 @@ ___ V.2 ________________________________________________________________________
 		SSH server
 	Install the GRUB boot loader on a hard disk /dev/sda
 
-3.	Update and upgrade system and packages
+03.	Update and upgrade system and packages
 		root@debian:~# apt-get update
 		root@debian:~# apt-get upgrade
 		root@debian:~# sysctl -w net.ipv6.conf.all.disable_ipv6=1
 
 ___ V.3 Network and Security Part ______________________________________________
-
-1.	Non root user was created durring OS installation
-2.	Log as root and install `sudo` package
+01.	Non root user was created durring OS installation
+02.	Log as root and install `sudo` package
 		root@debian:~# apt-get install sudo
 	Add roger to sudo's group
 		root@debian:~# adduser roger sudo
 	/! Exit from root and never come in back
-3.	roger@debian:~$ sudo vi /etc/network/interfaces
+03.	roger@debian:~$ sudo vi /etc/network/interfaces
 	iface enp0s3 inet static
 		address 10.13.31.1
 		netmask 255.255.255.252
 		gateway 10.13.254.254
 	roger@debian:~$ sudo reboot
-4.	Through Guest machine
+04.	Through Guest machine
 		roger@debian:~$ sudo vi /etc/ssh/sshd_config
 			Port 2222
 			PermitRootLogin no
@@ -81,7 +79,7 @@ ___ V.3 Network and Security Part ______________________________________________
 		roger@debian:~$ sudo service sshd restart
 	Now I can work on server through ssh from Host machine	
 		amalsago@42.fr:~$ ssh roger@10.13.31.1 -p 2222
-5.	roger@debian:~$ sudo apt-get install iptables-persistent
+05.	roger@debian:~$ sudo apt-get install iptables-persistent
 	roger@debian:~$ cd /etc/init.d
 	roger@debian:/etc/init.d$ sudo vi firewall
 		#!/bin/bash
@@ -122,7 +120,7 @@ ___ V.3 Network and Security Part ______________________________________________
 	roger@debian:/etc/init.d$ sudo chmod +x firewall
 	roger@debian:/etc/init.d$ sudo sh firewall
 	roger@debian:/etc/init.d$ sudo netfilter-persistent save
-6.	roger@debian:~$ sudo apt-get install fail2ban
+06.	roger@debian:~$ sudo apt-get install fail2ban
 	roger@debian:~$ cd /etc/fail2ban
 	roger@debian:/etc/fail2ban$ sudo cp jail.conf jail.local
 	roger@debian:/etc/fail2ban$ sudo vi jail.local
@@ -135,7 +133,7 @@ ___ V.3 Network and Security Part ______________________________________________
 		port     = 2222
 		logpath  = /var/log/auth.log
 	roger@debian:/etc/fail2ban$ sudo service fail2ban restart
-7.	roger@debian:~$ sudo apt-get install psad
+07.	roger@debian:~$ sudo apt-get install psad
 	roger@debian:~$ sudo vi /etc/init.d/firewall
 		# To organize log of packets for `psad`
 		...
@@ -155,7 +153,23 @@ ___ V.3 Network and Security Part ______________________________________________
 	roger@debian:~$ sudo psad --sig-update
 	roger@debian:~$ sudo psad -R
 	roger@debian:~$ sudo psad -S
-8.	roger@debian:~$ sudo service --status-all
+08.	roger@debian:~$ sudo service --status-all
+09.	roger@debian:~$ vi update_packages
+		#!/bin/bash
+		
+		(date && apt-get -y update && apt-get -y upgrade; echo) &>> /var/log/update_script.log
+	roger@debian:~$ sudo chmod +x /etc/cron.d/update_packages
+	roger@debian:~$ sudo cron-tab -e
+		0 4 * * 2       /etc/cron.d/update_packages
+		@reboot         /etc/cron.d/update_packages
+10.	roger@debian:~$ 
+
+___ V.4.1 ______________________________________________________________________
+10.	roger@debian:~$ sudo vi /etc/apt/sources.list.d/ngnix.list
+		deb http://nginx.org/packages/debian/ stretch nginx
+		deb-src http://nginx.org/packages/debian/ stretch nginx
+	roger@debian:~$ sudo apt-get update
+	roger@debian:~$ sudo apt-get install nginx
 
 
 
@@ -170,7 +184,6 @@ ___ V.3 Network and Security Part ______________________________________________
 
 
 
-6)
-sudo fail2ban-client status ssh                                - to see status of ssh jail
-sudo fail2ban-client set ssh unbanip @IP       - to unban IP
-sudo fail2ban-client status					- to see status of f2b
+
+
+
