@@ -93,7 +93,7 @@ ___ V.3 Network and Security Part ______________________________________________
 		$IPT -P FORWARD DROP
 		$IPT -P OUTPUT DROP
 		
-		# Accept all established connection
+		# Accept all established connection (3 way handshake)
 		$IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 		$IPT -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 		
