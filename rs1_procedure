@@ -147,7 +147,7 @@ ___ V.3 Network and Security Part ______________________________________________
 	roger@debian:~$ sudo service syslog restart
 	roger@debian:~$ sudo vi /etc/psad/psad.conf
 		EMAIL_ADDRESSES			root@localhost,amalsago@student.42.fr;
-		HOSTNAME				rs1@debian
+		HOSTNAME				rs1_debian
 		ENABLE_SYSLOG_FILE		Y;
 		IPT_WRITE_FWDATA		Y;
 		ENABLE_AUTO_IDS			Y;
@@ -155,7 +155,7 @@ ___ V.3 Network and Security Part ______________________________________________
 	roger@debian:~$ sudo psad --sig-update
 	roger@debian:~$ sudo psad -R
 	roger@debian:~$ sudo psad -S
-
+8.	roger@debian:~$ sudo service --status-all
 
 
 
