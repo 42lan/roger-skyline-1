@@ -154,15 +154,33 @@ ___ V.3 Network and Security Part ______________________________________________
 	roger@debian:~$ sudo psad -R
 	roger@debian:~$ sudo psad -S
 08.	roger@debian:~$ sudo service --status-all
-09.	roger@debian:~$ vi update_packages
+	roger@debian:~$ sudo service dbus stop
+	roger@debian:~$ sudo service exim4 stop
+	roger@debian:~$ sudo service rsyslog stop
+09.	roger@debian:~$ sudo vi /etc/cron.d/update_packages
 		#!/bin/bash
 		
-		(date && apt-get -y update && apt-get -y upgrade; echo) &>> /var/log/update_script.log
+		apt-get update
+		(date && apt-get -y upgrade | tail -1; echo) &>> /var/log/update_script.log
 	roger@debian:~$ sudo chmod +x /etc/cron.d/update_packages
 	roger@debian:~$ sudo cron-tab -e
 		0 4 * * 2       /etc/cron.d/update_packages
 		@reboot         /etc/cron.d/update_packages
-10.	roger@debian:~$ 
+10.	roger@debian:~$ sudo vi /etc/cron.d/cron_integrity
+		#!/bin/bash
+
+		OLDSUM=`cat /var/lib/cron.md5`
+		NEWSUM=`md5sum /etc/crontab`
+
+		if [ "$OLDSUM" != "$NEWSUM" ]
+		then
+			md5sum /etc/crontab > /var/lib/cron.md5
+			printf "$(date)\nWARNING - CRONTAB WAS MODIFIED\n" | mail -s "Crontab was modified" root@localhost
+		fi
+	roger@debian:~$ sudo chmod +x /etc/cron.d/cron_integrity
+	roger@debian:~$ sudo cron-tab -e
+		...
+		0 0 * * *       /etc/cron.d/cron_integrity
 
 ___ V.4.1 ______________________________________________________________________
 10.	roger@debian:~$ sudo vi /etc/apt/sources.list.d/ngnix.list
