@@ -183,18 +183,27 @@ ___ V.3 Network and Security Part ______________________________________________
 		0 0 * * *       /etc/cron.d/cron_integrity
 
 ___ V.4.1 ______________________________________________________________________
-10.	roger@debian:~$ sudo vi /etc/apt/sources.list.d/ngnix.list
-		deb http://nginx.org/packages/debian/ stretch nginx
-		deb-src http://nginx.org/packages/debian/ stretch nginx
-	roger@debian:~$ sudo apt-get update
-	roger@debian:~$ sudo apt-get install nginx
+10.	roger@debian:~$ sudo apt-get install apache2
+	roger@debian:~$ 
 
-
-
-
-
-
-
+	openssl genrsa -out mysite.key 2048
+	openssl req -new -key mysite.key -out mysite.csr
+	openssl x509 -req -days 365 -in mysite.csr -signkey mysite.key -out mysite.crt
+	sudo mv mysite.crt /etc/ssl/certs/
+	sudo mv mysite.key /etc/ssl/certs/
+	sudo a2enmod rewrite
+	vi /etc/apache2/sites-available/000-default.conf
+		<VirtualHost *:80>
+			Redirect permanent / https://10.13.31.1
+		</VirtualHost>
+		<VirtualHost *:443>
+		        ServerAdmin webmaster@localhost
+		        DocumentRoot /var/www/html
+		        SSLEngine on
+		        SSLCertificateFile      /etc/ssl/certs/mysite.crt
+		        SSLCertificateKeyfile   /etc/ssl/certs/mysite.key
+		</VirtualHost>
+	sudo service apache2 restart
 
 
 
