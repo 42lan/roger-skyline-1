@@ -72,6 +72,11 @@ sudo cp ~/rs1/deployement/update_packages /etc/cron.d/
 sudo chmod +x /etc/cron.d/update_packages
 sudo cp ~/rs1/deployement/cron_integrity /etc/cron.d/cron_integrity
 sudo chmod +x /etc/cron.d/cron_integrity
+echo "Write following line in crontab"
+echo "0 4 * * 2       /etc/cron.d/update_packages"
+echo "@reboot         /etc/cron.d/update_packages"
+read -p "0 0 * * *       /etc/cron.d/cron_integrity"
+sudo cron-tab -e
 sudo rm -rf ~/rs1
 sudo sh /etc/init.d/firewall
 sudo netfilter-persistent save
