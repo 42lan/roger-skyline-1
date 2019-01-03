@@ -61,8 +61,9 @@ sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 sudo sed -i "s/action \= \%\(action\_\)s/action \= \%\(action_mwl\)s/g" /etc/fail2ban/jail.local
 read -p "Please put enables = true, maxretry = 3, port = 2222 and logpath =/var/log/auth.log"
 sudo vi /etc/fail2ban/jail.local
-read -p "Copy the following line in file that open when you press [enter]"
+echo "Copy the following line in file that open when you press [enter]"
 printf "kern.info\t|/var/lib/psad/psadfifo\n"
+read
 sudo vi /etc/syslog.conf
 sudo service syslog restart
 sudo sed -i "s/EMAIL_ADDRESSES .*/EMAIL_ADDRESSES root\@localhost\,amalsago\@student\.42\.fr;/g" /etc/psad/psad.conf
