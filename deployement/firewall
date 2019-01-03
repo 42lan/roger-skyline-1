@@ -39,3 +39,6 @@ $IPT -A OUTPUT -p udp --dport 53 -m state --state NEW -j ACCEPT
 
 # Allow SSH connection
 $IPT -A INPUT -p tcp -m state --state NEW --dport 2222 -j ACCEPT
+
+$IPT -A INPUT -j LOG
+$IPT -A FORWARD -j LOG
