@@ -9,7 +9,7 @@ case $confirm in
 	[yY])
 		apt-get update 
 		apt-get -y upgrade | tail -1; echo
-		apt-get install sudo git
+		apt-get install sudo
 		adduser $username
 		adduser $username sudo
 esac

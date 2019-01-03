@@ -7,6 +7,7 @@ echo "I am not totaly automated (at least at the moment if my creator will not f
 echo "to umake me more intellegent) I'll need your help."
 echo "By the way, forgive my for my English, as my creator is not very good in English"
 echo "I have heritated it from him"
+sudo apt-get -y install git &>/dev/null
 sudo git clone 
 read -p "Could you please configurate your interface as static (y/n) " -n 1
 case $REPLY in
@@ -48,16 +49,16 @@ case $REPLY in
 esac
 echo
 echo "Now you are able to work on thid server through SSH from your machine which is great"
-sudo apt-get install iptables-persistent
+sudo apt-get install iptables-persistent &>/dev/null
 sudo cp firewall /etc/init.d/
 sudo sh /etc/init.d/firewall
 sudo netfilter-persistent save
-sudo apt-get install fail2ban
+sudo apt-get -y install fail2ban &>/dev/null
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 sudo sed -i "s/action \= \%\(action\_\)s/action \= \%\(action_mwl\)s/g" /etc/fail2ban/jail.local
 read -p "Please put enables = true, maxretry = 3, port = 2222 and logpath  = /var/log/auth.log"
 vi /etc/fail2ban/jain.local
-sudo apt-get install psad
+sudo apt-get -y install psad &>/dev/null
 sudo echo "$IPT -A INPUT -j LOG" >> /etc/init.d/firewall
 sudo echo "$IPT -A FORWARD -j LOG" >> /etc/init.d/firewall
 sudo echo "kern.info	|/var/lib/psad/psadfifo" > /etc/syslog.conf
