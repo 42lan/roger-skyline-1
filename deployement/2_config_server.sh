@@ -8,7 +8,8 @@ echo "to umake me more intellegent) I'll need your help."
 echo "By the way, forgive my for my English, as my creator is not very good in English"
 echo "I have heritated it from him"
 sudo apt-get -y install git &>/dev/null
-sudo git clone 
+sudo git clone https://github.com/4slan/roger-skyline-1.git rs1
+cd rs1/deployement
 read -p "Could you please configurate your interface as static (y/n) " -n 1
 case $REPLY in
 	[yY])
@@ -23,7 +24,7 @@ esac
 echo
 while read -p "Chose SSH port between 1000 and 65535 : " PORT;
 do
-	if ! [[ "$PORT" =~ ^[0-9]+$ ]]
+	if ! [[ ( "$PORT" =~ ^[0-9]+$ ) ]]
 	then
 		echo "Sorry the port need to be and integer"
 	else
@@ -71,12 +72,7 @@ sudo sed -i "s/AUTO_IDS_DANGER_LEVEL .*/AUTO_IDS_DANGER_LEVEL 1;/g" /etc/ssh/ssh
 sudo psad --sig-update
 sudo psad -R
 sudo psad -S
-sudo echo "apt-get update" > /etc/cron.d/update_packages
-sudo echo "(date && apt-get -y upgrade | tail -1; echo) &>> /var/log/update_script.log" > /etc/cron.d/update_packages
+sudo cp update_packages /etc/cron.d/
 sudo chmod +x /etc/cron.d/update_packages
 sudo cp cron_integrity /etc/cron.d/cron_integrity
 sudo chmod +x /etc/cron.d/cron_integrity
-read -p "Copy and add follow lines to crontab please"
-printf "0 4 * * 2\t/etc/cron.d/update_packages\n"
-printf "@reboot\t\t/etc/cron.d/update_packages\n"
-printf "0 0 * * *\t/etc/cron.d/cron_integrity\n"
