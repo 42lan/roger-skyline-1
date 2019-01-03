@@ -10,6 +10,10 @@ echo "| forget to to umake me more intellegent). I'll need your help.         |"
 echo "| By the way, forgive my English, as my creator is not very good in     |"
 echo "| English. So I have heritatedit from him.                              |"
 echo "+-----------------------------------------------------------------------+"
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+sudo locale-gen en_US.UTF-8
 sudo apt-get -yqq install git iptables-persistent fail2ban psad
 sudo git clone https://github.com/4slan/roger-skyline-1.git rs1
 read -p "Could you please configurate your interface as static (y/n) " -n 1
