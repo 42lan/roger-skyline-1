@@ -76,7 +76,7 @@ echo "Write following line in crontab"
 echo "0 4 * * 2       /etc/cron.d/update_packages"
 echo "@reboot         /etc/cron.d/update_packages"
 read -p "0 0 * * *       /etc/cron.d/cron_integrity"
-sudo cron-tab -e
+sudo crontab -e
 sudo rm -rf ~/rs1
 sudo sh /etc/init.d/firewall
 sudo netfilter-persistent save
