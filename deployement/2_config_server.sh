@@ -59,11 +59,12 @@ read -p "Please put enables = true, maxretry = 3, port = 2222 and logpath =/var/
 sudo vi /etc/fail2ban/jail.local
 sudo echo "kern.info	|/var/lib/psad/psadfifo" > /etc/syslog.conf
 sudo service syslog restart
-sudo sed -i "s/HOSTNAME .*/HOSTNAME $(hostname)/g" /etc/ssh/sshd_config
-sudo sed -i "s/ENABLE_SYSLOG_FILE .*/ENABLE_SYSLOG_FILE Y;/g" /etc/ssh/sshd_config
-sudo sed -i "s/IPT_WRITE_FWDATA .*/IPT_WRITE_FWDATA Y;/g" /etc/ssh/sshd_config
-sudo sed -i "s/ENABLE_AUTO_IDS .*/ENABLE_AUTO_IDS Y;/g" /etc/ssh/sshd_config
-sudo sed -i "s/AUTO_IDS_DANGER_LEVEL .*/AUTO_IDS_DANGER_LEVEL 1;/g" /etc/ssh/sshd_config
+sudo sed -i "s/EMAIL_ADDRESSES .*/EMAIL_ADDRESSES root\@localhost\,amalsago\@student\.42\.fr;/g" /etc/psad/psad.conf
+sudo sed -i "s/HOSTNAME .*/HOSTNAME $(hostname)/g" /etc/psad/psad.conf
+sudo sed -i "s/ENABLE_SYSLOG_FILE .*/ENABLE_SYSLOG_FILE Y;/g" /etc/psad/psad.conf
+sudo sed -i "s/IPT_WRITE_FWDATA .*/IPT_WRITE_FWDATA Y;/g" /etc/psad/psad.conf
+sudo sed -i "s/ENABLE_AUTO_IDS .*/ENABLE_AUTO_IDS Y;/g" /etc/psad/psad.conf
+sudo sed -i "s/AUTO_IDS_DANGER_LEVEL .*/AUTO_IDS_DANGER_LEVEL 1;/g" /etc/psad/psad.conf
 sudo psad --sig-update
 sudo psad -R
 sudo psad -S
