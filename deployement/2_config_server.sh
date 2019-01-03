@@ -43,7 +43,7 @@ read -p "Do you confirm that you have copied your public key (y/n) " -n 1
 case $REPLY in
 	[yY])
 		sudo sed -i "s/PubkeyAuthentication .*/PubkeyAuthentication yes/g" /etc/ssh/sshd_config
-		sudo sed -i "s/PasswordAuthentification .*/PasswordAuthentification no/g" /etc/ssh/sshd_config
+		sudo sed -i "s/PasswordAuthentication .*/PasswordAuthentication no/g" /etc/ssh/sshd_config
 		;;
 	*)
 		printf "\n$PLAY_GAME\n"
