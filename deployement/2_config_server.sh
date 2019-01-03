@@ -2,14 +2,16 @@
 # Configuration of server from non root user
 PLAY_GAME="Please launch me again and play the game"
 clear
-echo "Hello. I am Jesy and I'll configurate your server in 5 secodns."
-echo "I am not totaly automated (at least at the moment if my creator will not forget"
-echo "to umake me more intellegent) I'll need your help."
-echo "By the way, forgive my for my English, as my creator is not very good in English"
-echo "I have heritated it from him"
-sudo apt-get -y install git &>/dev/null
-sudo git clone https://github.com/4slan/roger-skyline-1.git rs1
-cd rs1/deployement
+echo "+-----------------------------------------------------------------------+"
+echo "| Hello!                                                                |"
+echo "| I am Jessy and I'll configurate your server in 5 secodns. I am        |"
+echo "| not totaly automated (at least at the moment if my creator will not   |"
+echo "| forget to to umake me more intellegent). I'll need your help.         |"
+echo "| By the way, forgive my English, as my creator is not very good in     |"
+echo "| English. So I have heritatedit from him.                              |"
+echo "+-----------------------------------------------------------------------+"
+sudo apt-get -y install git iptables-persistent fail2ban psad &>/dev/null
+sudo git clone https://github.com/4slan/roger-skyline-1.git rs1 &>/dev/null
 read -p "Could you please configurate your interface as static (y/n) " -n 1
 case $REPLY in
 	[yY])
@@ -50,16 +52,11 @@ case $REPLY in
 esac
 echo
 echo "Now you are able to work on thid server through SSH from your machine which is great"
-sudo apt-get install iptables-persistent &>/dev/null
 sudo cp firewall /etc/init.d/
-sudo sh /etc/init.d/firewall
-sudo netfilter-persistent save
-sudo apt-get -y install fail2ban &>/dev/null
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 sudo sed -i "s/action \= \%\(action\_\)s/action \= \%\(action_mwl\)s/g" /etc/fail2ban/jail.local
 read -p "Please put enables = true, maxretry = 3, port = 2222 and logpath  = /var/log/auth.log"
-vi /etc/fail2ban/jain.local
-sudo apt-get -y install psad &>/dev/null
+vi /etc/fail2ban/jail.local
 sudo echo "$IPT -A INPUT -j LOG" >> /etc/init.d/firewall
 sudo echo "$IPT -A FORWARD -j LOG" >> /etc/init.d/firewall
 sudo echo "kern.info	|/var/lib/psad/psadfifo" > /etc/syslog.conf
@@ -76,3 +73,5 @@ sudo cp update_packages /etc/cron.d/
 sudo chmod +x /etc/cron.d/update_packages
 sudo cp cron_integrity /etc/cron.d/cron_integrity
 sudo chmod +x /etc/cron.d/cron_integrity
+sudo sh /etc/init.d/firewall
+sudo netfilter-persistent save
