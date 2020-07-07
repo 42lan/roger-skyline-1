@@ -29,4 +29,5 @@ ___	Network and Security
 07.	
 08.	sudo netstat -npl
 09.	sudo service --status-all
+	sudo systemctl list-unit-files | grep enabled
 10.	
